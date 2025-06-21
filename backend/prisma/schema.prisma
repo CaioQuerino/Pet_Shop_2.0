@@ -1,0 +1,128 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Endereco {
+  cep      String @id
+  rua      String?
+  bairro   String?
+  cidade   String?
+  estado   String?
+  
+  usuarios     Usuario[]
+  funcionarios Funcionario[]
+  lojas        Loja[]
+
+  @@map("enderecos")
+}
+
+model Usuario {
+  cpf         String @id
+  logado      String?
+  nome        String?
+  sobrenome   String?
+  email       String?
+  senha       String?
+  img         String?
+  celular     String?
+  cep         String?
+  numero      String?
+  complemento String?
+  
+  endereco Endereco? @relation(fields: [cep], references: [cep])
+  pets     Pet[]
+
+  @@map("usuarios")
+}
+
+model Pet {
+  idPet     Int      @id @default(autoincrement())
+  idade     String?
+  consulta  DateTime?
+  hotel     DateTime?
+  nome      String?
+  tipo      String?
+  raca      String?
+  idUsuario String
+  
+  usuario Usuario @relation(fields: [idUsuario], references: [cpf])
+
+  @@map("pets")
+}
+
+model Funcionario {
+  idFuncionario String @id
+  logado        String?
+  img           String?
+  nome          String?
+  sobrenome     String?
+  funcao        FuncaoFuncionario @default(Default)
+  telefone      String?
+  email         String?
+  senha         String?
+  cep           String?
+  numero        String?
+  complemento   String?
+  
+  endereco Endereco? @relation(fields: [cep], references: [cep])
+  lojas    Loja[]
+  produtos Produto[]
+
+  @@map("funcionarios")
+}
+
+model Loja {
+  idLoja        Int    @id @default(autoincrement())
+  nome          String?
+  img           String?
+  cep           String?
+  numero        String?
+  complemento   String?
+  idFuncionario String?
+  
+  endereco    Endereco?    @relation(fields: [cep], references: [cep])
+  funcionario Funcionario? @relation(fields: [idFuncionario], references: [idFuncionario])
+  produtos    Produto[]
+
+  @@map("lojas")
+}
+
+model Produto {
+  idPro         Int    @id @default(autoincrement())
+  nome          String?
+  descricao     String?
+  preco         String?
+  img           String?
+  tipo          TipoProduto?
+  idLoja        Int?
+  idFuncionario String?
+  
+  loja        Loja?        @relation(fields: [idLoja], references: [idLoja])
+  funcionario Funcionario? @relation(fields: [idFuncionario], references: [idFuncionario])
+
+  @@map("produtos")
+}
+
+enum FuncaoFuncionario {
+  Default
+  Veterinario @map("Veterinário")
+  Gerente
+  Master
+}
+
+enum TipoProduto {
+  Cachorro
+  Gato
+  Passarinho
+  Peixe
+  Outros
+}
+

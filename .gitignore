@@ -1,0 +1,17 @@
+# Prisma
+dev.db
+dev.db-journal
+migrations  
+sqlite
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+node_modules
+.next
+documentation.pdf
+Modificações Realizadas no Blog.md
+RELATORIO_FINAL_TESTES.md
+documentation_updated.pdf
+teste-integracao.md
