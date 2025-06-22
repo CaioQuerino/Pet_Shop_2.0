@@ -39,6 +39,7 @@ model Usuario {
   
   endereco Endereco? @relation(fields: [cep], references: [cep])
   pets     Pet[]
+  agendamentos Agendamento[]
 
   @@map("usuarios")
 }
@@ -54,6 +55,7 @@ model Pet {
   idUsuario String
   
   usuario Usuario @relation(fields: [idUsuario], references: [cpf])
+  agendamentos Agendamento[]
 
   @@map("pets")
 }
@@ -75,6 +77,7 @@ model Funcionario {
   endereco Endereco? @relation(fields: [cep], references: [cep])
   lojas    Loja[]
   produtos Produto[]
+  servicos Servico[]
 
   @@map("funcionarios")
 }
@@ -124,5 +127,56 @@ enum TipoProduto {
   Passarinho
   Peixe
   Outros
+}
+
+model Servico {
+  idServico     Int      @id @default(autoincrement())
+  nome          String
+  descricao     String?
+  preco         Float
+  duracao       String?
+  categoria     CategoriaServico
+  ativo         Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  idFuncionario String?
+  
+  funcionario Funcionario? @relation(fields: [idFuncionario], references: [idFuncionario])
+  agendamentos Agendamento[]
+
+  @@map("servicos")
+}
+
+model Agendamento {
+  idAgendamento Int      @id @default(autoincrement())
+  dataHora      DateTime
+  status        StatusAgendamento @default(Agendado)
+  observacoes   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  idPet         Int
+  idServico     Int
+  idUsuario     String
+  
+  pet     Pet     @relation(fields: [idPet], references: [idPet])
+  servico Servico @relation(fields: [idServico], references: [idServico])
+  usuario Usuario @relation(fields: [idUsuario], references: [cpf])
+
+  @@map("agendamentos")
+}
+
+enum CategoriaServico {
+  Veterinario
+  Estetica
+  Hospedagem
+  Outros
+}
+
+enum StatusAgendamento {
+  Agendado
+  Confirmado
+  EmAndamento
+  Concluido
+  Cancelado
 }
 

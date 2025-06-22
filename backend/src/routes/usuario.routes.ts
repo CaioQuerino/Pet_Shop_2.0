@@ -1,4 +1,4 @@
-import { FastifyInstance } from 'fastify';
+import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { UsuarioController } from '../controllers/usuario.controller';
 import { authenticate } from '../middlewares/auth.middleware';
 import { createUsuarioSchema, loginUsuarioSchema, updateUsuarioSchema } from '../schemas/usuario.schema';

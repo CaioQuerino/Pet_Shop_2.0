@@ -3,6 +3,7 @@ import { usuarioRoutes } from './usuario.routes';
 import { funcionarioRoutes } from './funcionario.routes';
 import { produtoRoutes } from './produto.routes';
 import { petRoutes } from './pet.routes';
+import { ServiceRoutes } from './service.routes';
 
 export async function routes(fastify: FastifyInstance) {
   // Rota de health check
@@ -15,5 +16,6 @@ export async function routes(fastify: FastifyInstance) {
   fastify.register(funcionarioRoutes, { prefix: '/api/funcionarios' });
   fastify.register(produtoRoutes, { prefix: '/api/produtos' });
   fastify.register(petRoutes, { prefix: '/api/pets' });
+  fastify.register(ServiceRoutes, { prefix: '/api' });
 }
 

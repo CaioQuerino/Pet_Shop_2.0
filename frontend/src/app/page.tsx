@@ -59,7 +59,7 @@ export default function HomePage() {
             </div>
             <div className="relative">
               <Image
-                src="/images/Foto site.png"
+                src="/images/foto_site.png"
                 alt="Pet feliz"
                 width={600}
                 height={400}
@@ -95,7 +95,7 @@ export default function HomePage() {
                 <div key={produto.idPro} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
                   <div className="relative h-48 bg-gray-100">
                     <Image
-                      src=""
+                      src="/images/imagemProdutoOFF.png"
                       alt={produto.nome}
                       fill
                       className="object-cover"
