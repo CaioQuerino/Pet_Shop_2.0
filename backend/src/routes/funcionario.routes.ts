@@ -6,7 +6,6 @@ import { createFuncionarioSchema, loginFuncionarioSchema, updateFuncionarioSchem
 const funcionarioController = new FuncionarioController();
 
 export async function funcionarioRoutes(fastify: FastifyInstance) {
-  // Rotas públicas
   fastify.post('/register', {
     preValidation: async (request, reply) => {
       const result = createFuncionarioSchema.safeParse(request.body);
@@ -35,7 +34,6 @@ export async function funcionarioRoutes(fastify: FastifyInstance) {
     }
   }, funcionarioController.login);
 
-  // Rotas protegidas
   fastify.register(async function (fastify) {
     fastify.addHook('preHandler', authenticate);
 

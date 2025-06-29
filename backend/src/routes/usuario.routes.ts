@@ -6,7 +6,7 @@ import { createUsuarioSchema, loginUsuarioSchema, updateUsuarioSchema } from '..
 const usuarioController = new UsuarioController();
 
 export async function usuarioRoutes(fastify: FastifyInstance) {
-  // Rotas públicas
+
   fastify.post('/register', {
     preValidation: async (request, reply) => {
       const result = createUsuarioSchema.safeParse(request.body);
@@ -35,7 +35,7 @@ export async function usuarioRoutes(fastify: FastifyInstance) {
     }
   }, usuarioController.login);
 
-  // Rotas protegidas
+
   fastify.register(async function (fastify) {
     fastify.addHook('preHandler', authenticate);
 

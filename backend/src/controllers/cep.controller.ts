@@ -17,10 +17,10 @@ export class CepController {
   async consultarCep(request: FastifyRequest<{ Params: { cep: string } }>, reply: FastifyReply) {
     const { cep } = request.params;
 
-    // Remover caracteres não numéricos do CEP
+
     const cepLimpo = cep.replace(/\D/g, '');
 
-    // Validar formato do CEP
+
     if (cepLimpo.length !== 8) {
       return reply.status(400).send({
         status: 'error',
@@ -29,7 +29,7 @@ export class CepController {
     }
 
     try {
-      // Verificar se o CEP já existe no banco de dados
+
       const enderecoExistente = await prisma.endereco.findUnique({
         where: { cep: cepLimpo }
       });
@@ -49,9 +49,17 @@ export class CepController {
         });
       }
 
-      // Consultar CEP na API do ViaCEP
+
       const response = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
-      const data: ViaCepResponse = await response.json();
+      const data = await response.json();
+
+      // Verificar se a resposta é válida
+      if (!this.isViaCepResponse(data)) {
+        return reply.status(500).send({
+          status: 'error',
+          message: 'Resposta inválida da API ViaCEP'
+        });
+      }
 
       if (data.erro) {
         return reply.status(404).send({
@@ -60,7 +68,7 @@ export class CepController {
         });
       }
 
-      // Criar novo endereço no banco de dados
+
       const novoEndereco = await prisma.endereco.create({
         data: {
           cep: data.cep.replace(/\D/g, ''),
@@ -113,5 +121,17 @@ export class CepController {
       });
     }
   }
-}
 
+ 
+  private isViaCepResponse(obj: any): obj is ViaCepResponse {
+    return (
+      typeof obj === 'object' &&
+      obj !== null &&
+      'cep' in obj &&
+      'logradouro' in obj &&
+      'bairro' in obj &&
+      'localidade' in obj &&
+      'uf' in obj
+    );
+  }
+}

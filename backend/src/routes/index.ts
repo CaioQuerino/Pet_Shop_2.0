@@ -6,12 +6,12 @@ import { petRoutes } from './pet.routes';
 import { ServiceRoutes } from './service.routes';
 
 export async function routes(fastify: FastifyInstance) {
-  // Rota de health check
+
   fastify.get('/health', async (request, reply) => {
     return { status: 'ok', message: 'PetShop API está funcionando!' };
   });
 
-  // Registrar rotas
+
   fastify.register(usuarioRoutes, { prefix: '/api/usuarios' });
   fastify.register(funcionarioRoutes, { prefix: '/api/funcionarios' });
   fastify.register(produtoRoutes, { prefix: '/api/produtos' });

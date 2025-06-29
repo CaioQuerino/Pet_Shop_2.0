@@ -11,7 +11,6 @@ export class UsuarioController {
   async register(request: FastifyRequest<{ Body: CreateUsuarioInput }>, reply: FastifyReply) {
     const { cpf, nome, sobrenome, email, senha, celular, cep, numero, complemento } = request.body;
 
-    // Verificar se usuário já existe
     const existingUser = await prisma.usuario.findFirst({
       where: {
         OR: [
@@ -25,10 +24,8 @@ export class UsuarioController {
       throw new AppError('Usuário já existe com este CPF ou email', 409);
     }
 
-    // Hash da senha
     const hashedPassword = await bcrypt.hash(senha, 10);
 
-    // Criar endereço se fornecido
     if (cep && cep !== 'Nenhum') {
       await prisma.endereco.upsert({
         where: { cep },
@@ -43,7 +40,6 @@ export class UsuarioController {
       });
     }
 
-    // Criar usuário
     const user = await prisma.usuario.create({
       data: {
         cpf,
@@ -78,7 +74,6 @@ export class UsuarioController {
   async login(request: FastifyRequest<{ Body: LoginUsuarioInput }>, reply: FastifyReply) {
     const { email, senha } = request.body;
 
-    // Buscar usuário
     const user = await prisma.usuario.findFirst({
       where: { email }
     });
@@ -87,20 +82,17 @@ export class UsuarioController {
       throw new AppError('Credenciais inválidas', 401);
     }
 
-    // Verificar senha
     const isPasswordValid = await bcrypt.compare(senha, user.senha!);
 
     if (!isPasswordValid) {
       throw new AppError('Credenciais inválidas', 401);
     }
 
-    // Atualizar status de logado
     await prisma.usuario.update({
       where: { cpf: user.cpf },
       data: { logado: '1' }
     });
 
-    // Gerar token JWT
     const token = jwt.sign(
       { userId: user.cpf, userType: 'usuario' },
       process.env.JWT_SECRET!,

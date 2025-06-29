@@ -6,11 +6,9 @@ import { createPetSchema, updatePetSchema, agendarServicoSchema } from '../schem
 const petController = new PetController();
 
 export async function petRoutes(fastify: FastifyInstance) {
-  // Todas as rotas de pets são protegidas
   fastify.register(async function (fastify) {
     fastify.addHook('preHandler', authenticate);
 
-    // Rotas para usuários
     fastify.post('/', {
       preValidation: async (request, reply) => {
         const result = createPetSchema.safeParse(request.body);
@@ -58,7 +56,6 @@ export async function petRoutes(fastify: FastifyInstance) {
       }
     }, petController.agendarServico);
 
-    // Rota para funcionários visualizarem todos os pets
     fastify.get('/funcionario/all', petController.getAllForFuncionario);
   });
 }

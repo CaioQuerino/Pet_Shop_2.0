@@ -2,13 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  getDashboard, 
-  getUsuariosPorEndereco, 
-  getPetsPorTipo, 
-  getProdutosPorTipo, 
-  getAgendamentos 
+import {
+  getAllUsuarios,
+  getAllProdutos,
+  getAllPetsForFuncionario,
+  getProdutosByTipo,
+  getAllAgendamentos
 } from '@/lib/api';
+import { useAuth } from '@/contexts/AuthContext';
 import { 
   BarChart3, 
   Users, 
@@ -40,27 +41,28 @@ export default function RelatoriosPage() {
 
   const loadData = async () => {
     setLoading(true);
-    setError('');
     try {
       let response;
       switch (activeTab) {
         case 'dashboard':
-          response = await getDashboard();
+          // Simular dados de dashboard
+          response = { data: { stats: { totalUsuarios: 0, totalProdutos: 0, totalPets: 0, totalAgendamentos: 0 } } };
           break;
         case 'usuarios':
-          response = await getUsuariosPorEndereco();
+          response = await getAllUsuarios();
           break;
         case 'pets':
-          response = await getPetsPorTipo();
+          response = await getAllPetsForFuncionario();
           break;
         case 'produtos':
-          response = await getProdutosPorTipo();
+          response = await getAllProdutos();
           break;
         case 'agendamentos':
-          response = await getAgendamentos();
+          response = await getAllAgendamentos();
           break;
         default:
-          response = await getDashboard();
+          // Simular dados de dashboard
+          response = { data: { stats: { totalUsuarios: 0, totalProdutos: 0, totalPets: 0, totalAgendamentos: 0 } } };
       }
       setData(response.data);
     } catch (error: any) {

@@ -73,7 +73,6 @@ export class ServicoController {
     }
   }
 
-  // Listar todos os serviços
   async getAll(request: FastifyRequest<{ Querystring: { categoria?: string; ativo?: string } }>, reply: FastifyReply) {
     try {
       const { categoria, ativo } = request.query;
@@ -123,7 +122,6 @@ export class ServicoController {
     }
   }
 
-  // Buscar serviço por ID
   async getById(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
     try {
       const { id } = request.params;
@@ -192,7 +190,6 @@ export class ServicoController {
     }
   }
 
-  // Atualizar serviço
   async update(request: FastifyRequest<{ Params: { id: string }; Body: UpdateServicoInput }>, reply: FastifyReply) {
     try {
       const { id } = request.params;
@@ -204,7 +201,6 @@ export class ServicoController {
 
       const data = updateServicoSchema.parse(request.body);
 
-      // Verificar se serviço existe
       const servicoExistente = await prisma.servico.findUnique({
         where: { idServico: servicoId }
       });
@@ -213,7 +209,6 @@ export class ServicoController {
         throw new AppError('Serviço não encontrado', 404);
       }
 
-      // Verificar se funcionário existe (se fornecido)
       if (data.idFuncionario) {
         const funcionario = await prisma.funcionario.findUnique({
           where: { idFuncionario: data.idFuncionario }
@@ -268,7 +263,6 @@ export class ServicoController {
     }
   }
 
-  // Deletar serviço (soft delete)
   async delete(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
     try {
       const { id } = request.params;
@@ -278,7 +272,6 @@ export class ServicoController {
         throw new AppError('ID do serviço inválido', 400);
       }
 
-      // Verificar se serviço existe
       const servicoExistente = await prisma.servico.findUnique({
         where: { idServico: servicoId }
       });
@@ -287,7 +280,6 @@ export class ServicoController {
         throw new AppError('Serviço não encontrado', 404);
       }
 
-      // Verificar se há agendamentos ativos
       const agendamentosAtivos = await prisma.agendamento.count({
         where: {
           idServico: servicoId,
@@ -301,7 +293,6 @@ export class ServicoController {
         throw new AppError('Não é possível deletar serviço com agendamentos ativos', 400);
       }
 
-      // Soft delete - marcar como inativo
       await prisma.servico.update({
         where: { idServico: servicoId },
         data: { ativo: false }
@@ -327,12 +318,10 @@ export class ServicoController {
     }
   }
 
-  // Criar agendamento
   async createAgendamento(request: FastifyRequest<{ Body: CreateAgendamentoInput }>, reply: FastifyReply) {
     try {
       const data = createAgendamentoSchema.parse(request.body);
 
-      // Verificar se pet existe e pertence ao usuário
       const pet = await prisma.pet.findUnique({
         where: { idPet: data.idPet },
         include: { usuario: true }
@@ -346,7 +335,6 @@ export class ServicoController {
         throw new AppError('Pet não pertence ao usuário', 403);
       }
 
-      // Verificar se serviço existe e está ativo
       const servico = await prisma.servico.findUnique({
         where: { idServico: data.idServico }
       });
@@ -359,7 +347,6 @@ export class ServicoController {
         throw new AppError('Serviço não está disponível', 400);
       }
 
-      // Verificar se já existe agendamento no mesmo horário
       const agendamentoExistente = await prisma.agendamento.findFirst({
         where: {
           dataHora: data.dataHora,
@@ -435,7 +422,6 @@ export class ServicoController {
     }
   }
 
-  // Listar agendamentos
   async getAgendamentos(request: FastifyRequest<{ Querystring: { usuario?: string; status?: string } }>, reply: FastifyReply) {
     try {
       const { usuario, status } = request.query;
@@ -498,7 +484,6 @@ export class ServicoController {
     }
   }
 
-  // Atualizar status do agendamento
   async updateAgendamentoStatus(request: FastifyRequest<{ Params: { id: string }; Body: { status: string } }>, reply: FastifyReply) {
     try {
       const { id } = request.params;
@@ -514,7 +499,6 @@ export class ServicoController {
         throw new AppError('Status inválido', 400);
       }
 
-      // Verificar se agendamento existe
       const agendamentoExistente = await prisma.agendamento.findUnique({
         where: { idAgendamento: agendamentoId }
       });

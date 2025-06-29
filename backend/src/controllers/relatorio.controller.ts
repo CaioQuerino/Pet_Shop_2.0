@@ -5,11 +5,9 @@ import { AppError } from '../utils/AppError';
 const prisma = new PrismaClient();
 
 export class RelatorioController {
-  // Relatório de usuários por endereço
   async usuariosPorEndereco(request: FastifyRequest, reply: FastifyReply) {
     const funcionarioId = request.user?.userId;
 
-    // Verificar se é funcionário
     const funcionario = await prisma.funcionario.findUnique({
       where: { idFuncionario: funcionarioId }
     });
@@ -59,11 +57,9 @@ export class RelatorioController {
     });
   }
 
-  // Relatório de pets por tipo
   async petsPorTipo(request: FastifyRequest, reply: FastifyReply) {
     const funcionarioId = request.user?.userId;
 
-    // Verificar se é funcionário
     const funcionario = await prisma.funcionario.findUnique({
       where: { idFuncionario: funcionarioId }
     });
@@ -84,9 +80,8 @@ export class RelatorioController {
       }
     });
 
-    // Buscar detalhes dos pets por tipo
     const detalhes = await Promise.all(
-      relatorio.map(async (item) => {
+      relatorio.map(async (item: any) => {
         const pets = await prisma.pet.findMany({
           where: { tipo: item.tipo },
           include: {
@@ -116,7 +111,6 @@ export class RelatorioController {
     });
   }
 
-  // Relatório de produtos por tipo
   async produtosPorTipo(request: FastifyRequest, reply: FastifyReply) {
     const funcionarioId = request.user?.userId;
 
@@ -143,7 +137,7 @@ export class RelatorioController {
 
     // Buscar detalhes dos produtos por tipo
     const detalhes = await Promise.all(
-      relatorio.map(async (item) => {
+      relatorio.map(async (item: any) => {
         const produtos = await prisma.produto.findMany({
           where: { tipo: item.tipo },
           include: {
@@ -177,11 +171,9 @@ export class RelatorioController {
     });
   }
 
-  // Relatório de agendamentos
   async agendamentos(request: FastifyRequest, reply: FastifyReply) {
     const funcionarioId = request.user?.userId;
 
-    // Verificar se é funcionário
     const funcionario = await prisma.funcionario.findUnique({
       where: { idFuncionario: funcionarioId }
     });
@@ -215,7 +207,6 @@ export class RelatorioController {
       orderBy: { consulta: 'asc' }
     });
 
-    // Hotel agendado
     const hotel = await prisma.pet.findMany({
       where: {
         hotel: {
@@ -249,11 +240,9 @@ export class RelatorioController {
     });
   }
 
-  // Dashboard com estatísticas gerais
   async dashboard(request: FastifyRequest, reply: FastifyReply) {
     const funcionarioId = request.user?.userId;
 
-    // Verificar se é funcionário
     const funcionario = await prisma.funcionario.findUnique({
       where: { idFuncionario: funcionarioId }
     });
@@ -262,24 +251,20 @@ export class RelatorioController {
       throw new AppError('Acesso negado', 403);
     }
 
-    // Contar totais
     const totalUsuarios = await prisma.usuario.count();
     const totalPets = await prisma.pet.count();
     const totalProdutos = await prisma.produto.count();
     const totalFuncionarios = await prisma.funcionario.count();
     const totalEnderecos = await prisma.endereco.count();
 
-    // Usuários logados
     const usuariosLogados = await prisma.usuario.count({
       where: { logado: '1' }
     });
 
-    // Funcionários logados
     const funcionariosLogados = await prisma.funcionario.count({
       where: { logado: '1' }
     });
 
-    // Agendamentos próximos (próximos 7 dias)
     const proximaSemana = new Date();
     proximaSemana.setDate(proximaSemana.getDate() + 7);
 

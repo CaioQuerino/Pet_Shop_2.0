@@ -103,6 +103,7 @@ model Produto {
   nome          String?
   descricao     String?
   preco         String?
+  estoque       Int
   img           String?
   tipo          TipoProduto?
   idLoja        Int?

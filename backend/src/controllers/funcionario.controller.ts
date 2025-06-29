@@ -25,10 +25,8 @@ export class FuncionarioController {
       throw new AppError('Funcionário já existe com este ID ou email', 409);
     }
 
-    // Hash da senha
     const hashedPassword = await bcrypt.hash(senha, 10);
 
-    // Criar endereço se fornecido
     if (cep && cep !== 'Nenhum') {
       await prisma.endereco.upsert({
         where: { cep },
@@ -43,7 +41,6 @@ export class FuncionarioController {
       });
     }
 
-    // Criar funcionário
     const funcionario = await prisma.funcionario.create({
       data: {
         idFuncionario,
@@ -80,7 +77,6 @@ export class FuncionarioController {
   async login(request: FastifyRequest<{ Body: LoginFuncionarioInput }>, reply: FastifyReply) {
     const { email, senha } = request.body;
 
-    // Buscar funcionário
     const funcionario = await prisma.funcionario.findFirst({
       where: { email }
     });
@@ -89,20 +85,17 @@ export class FuncionarioController {
       throw new AppError('Credenciais inválidas', 401);
     }
 
-    // Verificar senha
     const isPasswordValid = await bcrypt.compare(senha, funcionario.senha!);
 
     if (!isPasswordValid) {
       throw new AppError('Credenciais inválidas', 401);
     }
 
-    // Atualizar status de logado
     await prisma.funcionario.update({
       where: { idFuncionario: funcionario.idFuncionario },
       data: { logado: '1' }
     });
 
-    // Gerar token JWT
     const token = jwt.sign(
       { userId: funcionario.idFuncionario, userType: 'funcionario' },
       process.env.JWT_SECRET!,

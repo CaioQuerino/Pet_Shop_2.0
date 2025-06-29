@@ -14,6 +14,8 @@ export default function CadastrarProdutoPage() {
     tipo: 'Cachorro' as 'Cachorro' | 'Gato' | 'Passarinho' | 'Peixe' | 'Outros',
     idLoja: '',
     idFuncionario: '',
+    categoria: '',
+    estoque: '',
   });
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -51,15 +53,14 @@ export default function CadastrarProdutoPage() {
         imagePath = imageResult.data.path;
       }
 
-      // Criar produto usando a função da API
       const productData = {
         nome: formData.nome,
         descricao: formData.descricao,
-        preco: formData.preco,
-        tipo: formData.tipo,
+        preco: parseFloat(formData.preco),
+        tipo: formData.tipo as 'Cachorro' | 'Gato' | 'Peixe' | 'Passarinho' | 'Outros',
         idLoja: formData.idLoja ? parseInt(formData.idLoja) : undefined,
-        idFuncionario: formData.idFuncionario || undefined,
-        img: imagePath || '/images/imagemProdutoOFF.png',
+        categoria: formData.categoria,
+        estoque: formData.estoque ? parseInt(formData.estoque) : 0,
       };
 
       const result = await createProduto(productData);

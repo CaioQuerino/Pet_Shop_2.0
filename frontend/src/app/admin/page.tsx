@@ -55,7 +55,7 @@ export default function AdminPage() {
 
         // Pegar os 5 usuários mais recentes
         setRecentUsers(usuariosRes.data.usuarios.slice(-5).reverse());
-      } catch (error: any) {
+      } catch (error) {
         console.error('Erro ao carregar dados:', error);
         setError('Erro ao carregar dados do painel');
       } finally {

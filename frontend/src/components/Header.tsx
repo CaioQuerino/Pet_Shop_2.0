@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
-import { ShoppingBag, User, LogOut, PlusCircle, Heart } from 'lucide-react';
+import { User, LogOut, PlusCircle, Heart } from 'lucide-react';
 
 export default function Header() {
   const { user, userType, isLoggedIn, logout } = useAuth();

@@ -107,11 +107,12 @@ export default function ProdutoDetalhePage() {
     '/images/foto_site.png'
   ];
 
-  const formatPrice = (price: string) => {
-    if (!price.includes('€')) {
-      return `€${price}`;
+  const formatPrice = (price: string | number) => {
+    const priceStr = typeof price === 'number' ? price.toString() : price;
+    if (!priceStr.includes('€')) {
+      return `€${priceStr}`;
     }
-    return price;
+    return priceStr;
   };
 
   return (

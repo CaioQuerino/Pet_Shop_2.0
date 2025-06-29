@@ -6,12 +6,10 @@ import { createProdutoSchema, updateProdutoSchema } from '../schemas/produto.sch
 const produtoController = new ProdutoController();
 
 export async function produtoRoutes(fastify: FastifyInstance) {
-  // Rotas públicas
   fastify.get('/', produtoController.getAll);
   fastify.get('/:id', produtoController.getById);
   fastify.get('/tipo/:tipo', produtoController.getByTipo);
 
-  // Rotas protegidas (apenas funcionários)
   fastify.register(async function (fastify) {
     fastify.addHook('preHandler', authenticate);
 

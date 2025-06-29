@@ -10,7 +10,6 @@ export class PetController {
     const { nome, tipo, raca, idade, consulta, hotel } = request.body;
     const usuarioId = request.user?.userId;
 
-    // Verificar se o usuário existe
     const usuario = await prisma.usuario.findUnique({
       where: { cpf: usuarioId }
     });
@@ -96,7 +95,6 @@ export class PetController {
     const updateData = request.body;
     const usuarioId = request.user?.userId;
 
-    // Verificar se o pet existe e pertence ao usuário
     const existingPet = await prisma.pet.findFirst({
       where: { 
         idPet: parseInt(id),
@@ -108,7 +106,6 @@ export class PetController {
       throw new AppError('Pet não encontrado', 404);
     }
 
-    // Converter datas se fornecidas
     const dataToUpdate: any = { ...updateData };
     if (updateData.consulta) {
       dataToUpdate.consulta = new Date(updateData.consulta);
@@ -142,7 +139,6 @@ export class PetController {
     const { id } = request.params;
     const usuarioId = request.user?.userId;
 
-    // Verificar se o pet existe e pertence ao usuário
     const existingPet = await prisma.pet.findFirst({
       where: { 
         idPet: parseInt(id),
@@ -168,7 +164,6 @@ export class PetController {
     const { petId, tipoServico, data } = request.body;
     const usuarioId = request.user?.userId;
 
-    // Verificar se o pet existe e pertence ao usuário
     const pet = await prisma.pet.findFirst({
       where: { 
         idPet: petId,
@@ -180,7 +175,6 @@ export class PetController {
       throw new AppError('Pet não encontrado', 404);
     }
 
-    // Atualizar o campo correspondente
     const updateData: any = {};
     if (tipoServico === 'consulta') {
       updateData.consulta = new Date(data);
@@ -209,11 +203,9 @@ export class PetController {
     });
   }
 
-  // Método para funcionários visualizarem todos os pets (para consultas e hotel)
   async getAllForFuncionario(request: FastifyRequest, reply: FastifyReply) {
     const funcionarioId = request.user?.userId;
 
-    // Verificar se é funcionário
     const funcionario = await prisma.funcionario.findUnique({
       where: { idFuncionario: funcionarioId }
     });
