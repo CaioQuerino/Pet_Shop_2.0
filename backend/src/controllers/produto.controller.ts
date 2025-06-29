@@ -13,7 +13,7 @@ type ProdutoWithRelations = Produto & {
 export class ProdutoController {
   async create(request: FastifyRequest<{ Body: CreateProdutoInput }>, reply: FastifyReply) {
     try {
-      const { nome, descricao, preco, tipo, estoque, idLoja } = request.body;
+      const { nome, descricao, preco, tipo, categoria, estoque, idLoja } = request.body;
       const funcionarioId = request.user?.userId;
 
       if (!funcionarioId) {
@@ -39,9 +39,10 @@ export class ProdutoController {
         data: {
           nome,
           descricao,
-          preco: preco, // Preço já é um number validado pelo schema
+          preco, // Preço já é um number validado pelo schema
           tipo,
-          estoque,
+          categoria,
+          estoque: estoque || 0,
           idLoja,
           idFuncionario: funcionarioId,
           img: './img/imagemProdutoOFF.png'

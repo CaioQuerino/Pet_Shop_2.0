@@ -154,10 +154,13 @@ export default function DetalhesClientePage() {
               <p className="text-gray-600 mt-2">Detalhes do cliente</p>
             </div>
             <div className="flex space-x-2">
-              <button className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+              <Link 
+                href={`/admin/usuarios/editar/${usuario.cpf}`}
+                className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+              >
                 <Edit className="h-4 w-4 mr-2" />
                 Editar
-              </button>
+              </Link>
               <button className="inline-flex items-center px-4 py-2 border border-red-300 rounded-md text-red-700 bg-white hover:bg-red-50 transition-colors">
                 <Trash2 className="h-4 w-4 mr-2" />
                 Excluir
