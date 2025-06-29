@@ -3,6 +3,7 @@ dev.db
 dev.db-journal
 migrations  
 sqlite
+prisma
 .env
 .env.local
 .env.development.local
@@ -16,5 +17,6 @@ RELATORIO_FINAL_TESTES.md
 documentation_updated.pdf
 teste-integracao.md
 README_MELHORIAS.md
-README_MELHORIAS.md
+.README_BUGS_CORRIGIDOS.md
+.README_MELHORIAS.md
 .gitignore
