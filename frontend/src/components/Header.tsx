@@ -83,7 +83,7 @@ export default function Header() {
 
                 {userType === 'funcionario' && (
                   <Link
-                    href="/admin/produtos/novo"
+                    href="/admin/cadastrar-produto/novo"
                     className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition-colors"
                   >
                     <PlusCircle className="h-5 w-5" />

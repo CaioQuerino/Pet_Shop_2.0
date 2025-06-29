@@ -12,6 +12,7 @@ async function start() {
     // Registrar CORS
     await fastify.register(cors, {
       origin: true, // Permitir todas as origens em desenvolvimento
+      methods: ["POST", "GET", "PUT", "DELETE"],
       credentials: true
     });
 
